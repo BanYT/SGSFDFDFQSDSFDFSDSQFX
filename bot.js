@@ -771,4 +771,4 @@ if (command === 'test') {
 
 });
 
-bot.login('NTA4MjU1MjY3MzEwNDAzNjA0.Dt_YhA.efRUUr3xA617DHin7we7_XKq48M');
+bot.login(process.env.token);
