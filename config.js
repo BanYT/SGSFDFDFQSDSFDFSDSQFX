@@ -1,3 +1,3 @@
-module.exports.token = prcess.env.token;
+module.exports.token = process.env.token;
 
 module.exports.prefix = ""
