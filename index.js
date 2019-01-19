@@ -1,6 +1,7 @@
 Discord = require("discord.js");
 const client = new Discord.Client();
 let token = process.env.token;
+let prefix = "!";
 
 
 
