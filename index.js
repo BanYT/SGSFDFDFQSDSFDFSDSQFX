@@ -1,37 +1,55 @@
-const Discord = require('discord.js');
+Discord = require("discord.js");
+const botconfig = require("./botconfig.json");
+const fs = require("fs");
 const client = new Discord.Client();
+require('./util/cmdloader.js')(client);//requires the command loader
+let token = process.env.token;
+let prefix = ".";
+
 
 client.on('ready', () => {
-  client.user.setGame(' https://discord.gg/hXJZhqa ', 'https://www.twitch.tv/lucasdavid913/')
-})   
+        client.user.setActivity(`On ${client.guilds.size} Servers With ${client.users.size} Members`, { type: "PLAYING" });
+        setTimeout(game2, 20000)
+    });
+    
+    function game1() {
+        client.user.setActivity(`${client.guilds.array().length} Servers || With ${client.users.size} Members`, { type: "Watching" });
+        setTimeout(game2, 20000)
+    }
+    
+    function game2() {
+        client.user.setActivity(`To .help || To Get Full List Of My Commands`, { type: "LISTENING" });
+        setTimeout(game3, 20000)
+    }
+    
+    function game3() {
+       client.user.setActivity(`To ${client.commands.size} Commands`, { type: "LSTENING" });
+        setTimeout(game1, 20000);//these times are in ms, so 30,000 = 30 seconds
+    } 
+client.on('message', message => {
 
-client.on('message', message => {    
-    if(message.content.startsWith('*mass')) {
-    if(message.author.id === "411142251352293378" ||
-message.author.id === "411142251352293378"){
-       let args = message.content.split(" ").slice(1);         
-       var argresult = args.join(" ")      
-const argsresult = args.join(" ")         
-       let reason = args.join(" ")                   
-    if(!args[1]) {  }  
-    if(args[1]) { 
-message.channel.guild.members.forEach(member => {{ 
-member.send(reason)
-message.delete() }})}}} });
+	
+ if (message.author.bot) return;
+ if (!message.content.startsWith(prefix)) return;
 
-client.on('message', message =>{
+  let command = message.content.split(" ")[0];
+  command = command.slice(prefix.length);
   let args = message.content.split(" ").slice(1);
 
-  if ( message.content.startsWith("https://discord.gg")) {
-    message.delete()
-    let embed = new Discord.RichEmbed()
-            .setTitle('No Invite Link')
-            .setColor('RANDOM')
-            .setFooter('No invite link!')
-            .setTimestamp()
-        
-        message.channel.send(embed);
-  }
 
-});  
+	
+//command handler
+let commandfile = client.commands.get(command);
+  let alias = client.aliases.get(command);
+
+  if(commandfile){
+	  commandfile.run(client,message,args);
+  }
+  if(alias){
+	  alias.run(client,message,args);
+  }
+//end of handler
+
+
+});
 client.login(process.env.token);
